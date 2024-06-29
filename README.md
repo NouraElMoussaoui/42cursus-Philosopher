@@ -15,5 +15,5 @@ This project is an implementation of the classic dining philosophers problem usi
   * GCC compiler
   * Make
 ### Running the project 
-#### After building the project, you can runit using:
+#### After building the project, you can run it using:
 `./philo [arguments]`
