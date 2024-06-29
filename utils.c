@@ -6,7 +6,7 @@
 /*   By: nel-mous <nel-mous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 12:59:19 by nel-mous          #+#    #+#             */
-/*   Updated: 2023/04/24 18:44:11 by nel-mous         ###   ########.fr       */
+/*   Updated: 2023/04/28 08:43:39 by nel-mous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int	ft_isdigit(int c)
 
 long long	ft_atoi(const char *s)
 {
-	char		*str;
-	int			i;
+	char				*str;
+	int					i;
 	long long			x;
-	int			sign;
+	int					sign;
 
 	str = (char *)s;
 	i = 0;
@@ -38,7 +38,8 @@ long long	ft_atoi(const char *s)
 			sign *= -1;
 		i++;
 	}
-	while (str[i] != '\0' && (str[i] >= '0' && str[i] <= '9') && ((x * sign) >= -2147483648 && (x * sign) <= 2147483647))
+	while (str[i] != '\0' && (str[i] >= '0' && str[i] <= '9')
+		&& ((x * sign) >= -2147483648 && (x * sign) <= 2147483647))
 	{
 		x = x * 10 + str[i] - '0';
 		i++;
@@ -46,12 +47,13 @@ long long	ft_atoi(const char *s)
 	return (x * sign);
 }
 
-void	free_mutexes(t_param *params, pthread_mutex_t *forks)
+void	free_all(t_param *params, pthread_mutex_t *forks,
+			pthread_t *thread, int last_mutex)
 {
 	int	i;
 
 	i = 0;
-	while (i < params->n_philo)
+	while (i < last_mutex)
 	{
 		pthread_mutex_destroy(&forks[i]);
 		i++;
@@ -60,11 +62,15 @@ void	free_mutexes(t_param *params, pthread_mutex_t *forks)
 	pthread_mutex_destroy(params->m_check);
 	free(params->m_print);
 	free(params->m_check);
+	free(params);
+	free(thread);
+	free(forks);
 }
 
-void	free_all(t_param *params, pthread_mutex_t *forks, pthread_t *thread)
+void	free_if_fail(t_param *params, pthread_mutex_t *forks, pthread_t *thread)
 {
-	free_mutexes(params, forks);
+	free(params->m_print);
+	free(params->m_check);
 	free(params);
 	free(thread);
 	free(forks);

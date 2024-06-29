@@ -6,7 +6,7 @@
 #    By: nel-mous <nel-mous@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/04 09:26:05 by nel-mous          #+#    #+#              #
-#    Updated: 2023/04/24 18:39:28 by nel-mous         ###   ########.fr        #
+#    Updated: 2023/05/03 15:26:00 by nel-mous         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,12 +16,9 @@ OBJS	=$(SRCS:.c=.o)
 
 NAME	= philo
 
-CC	= gcc
+CC	= cc
 
-# -fsanitize=address -g
-# -fsanitize=thread -g
-
-CFLAGS	= -Wall -Wextra -Werror -pthread 
+CFLAGS	= -Wall -Wextra -Werror -pthread
 
 %.o: %.c philo.h
 	$(CC) $(CFLAGS) -c $< -o $@

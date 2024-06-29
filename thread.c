@@ -6,7 +6,7 @@
 /*   By: nel-mous <nel-mous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 14:33:09 by nel-mous          #+#    #+#             */
-/*   Updated: 2023/04/24 19:24:28 by nel-mous         ###   ########.fr       */
+/*   Updated: 2023/05/03 15:19:10 by nel-mous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	check_death(t_param *params, int i)
 {
 	pthread_mutex_lock(params->m_print);
-	*params->v_died = 0;
+	*params->v_check = 0;
 	printf("%ld %d died\n", ft_timestamp(params->start_time), i + 1);
 	pthread_mutex_unlock(params->m_print);
 	pthread_mutex_unlock(params->m_check);
@@ -24,7 +24,7 @@ void	check_death(t_param *params, int i)
 void	check_meals(t_param *params)
 {
 	pthread_mutex_lock(params->m_print);
-	*params->v_died = 0;
+	*params->v_check = 0;
 	pthread_mutex_unlock(params->m_print);
 	pthread_mutex_unlock(params->m_check);
 }
@@ -52,19 +52,21 @@ void	ft_check(t_param *params)
 	}
 }
 
-void	wait_exec(t_param *params, pthread_t *thread)
+int	wait_exec(t_param *params, pthread_t *thread, pthread_mutex_t *forks)
 {
 	int	i;
 
 	i = 0;
 	while (i < params->n_philo)
 	{
-		pthread_join(thread[i], NULL);
+		if (pthread_join(thread[i], NULL) != 0)
+			return (free_all(params, forks, thread, params->n_philo), 0);
 		i++;
 	}
+	return (1);
 }
 
-void	create_philo(t_param *params, pthread_t *thread)
+int	create_philo(t_param *params, pthread_t *thread, pthread_mutex_t *forks)
 {
 	int	i;
 
@@ -72,10 +74,12 @@ void	create_philo(t_param *params, pthread_t *thread)
 	while (i < params->n_philo)
 	{
 		if (pthread_create(&thread[i], NULL, &philo_routine, &params[i]) != 0)
-			return ;
-		usleep(10);
+			return (free_all (params, forks, thread, params->n_philo), 0);
+		usleep(150);
 		i++;
 	}
 	ft_check(params);
-	wait_exec(params, thread);
+	if (wait_exec(params, thread, forks) != 1)
+		return (0);
+	return (1);
 }

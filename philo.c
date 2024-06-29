@@ -6,7 +6,7 @@
 /*   By: nel-mous <nel-mous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 10:04:56 by nel-mous          #+#    #+#             */
-/*   Updated: 2023/04/24 19:24:12 by nel-mous         ###   ########.fr       */
+/*   Updated: 2023/05/03 14:46:33 by nel-mous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	print_msg(t_param *params, char *msg)
 {
 	pthread_mutex_lock(params->m_print);
-	if (*params->v_died == 1)
+	if (*params->v_check == 1)
 		printf("%ld %d %s\n", ft_timestamp(params->start_time),
 			params->id_p, msg);
 	pthread_mutex_unlock(params->m_print);
@@ -51,8 +51,6 @@ void	*philo_routine(void *arg)
 	int		v;
 
 	params = (t_param *)arg;
-	if(params->id_p % 2 == 0)
-		usleep(100);
 	v = 1;
 	while (v)
 	{
@@ -68,7 +66,7 @@ void	*philo_routine(void *arg)
 		pthread_mutex_unlock(params->left_fork);
 		philo_sleep(params);
 		pthread_mutex_lock(params->m_check);
-		v = *params->v_died;
+		v = *params->v_check;
 		pthread_mutex_unlock(params->m_check);
 	}
 	return (NULL);

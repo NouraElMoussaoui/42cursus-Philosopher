@@ -6,7 +6,7 @@
 /*   By: nel-mous <nel-mous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 09:26:13 by nel-mous          #+#    #+#             */
-/*   Updated: 2023/04/24 18:37:26 by nel-mous         ###   ########.fr       */
+/*   Updated: 2023/04/28 11:19:00 by nel-mous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_param
 	long int		start_time;
 	long int		nb_t_must_eat;
 	long int		t_last_meal;
-	int				*v_died;
+	int				*v_check;
 	pthread_mutex_t	*m_print;
 	pthread_mutex_t	*m_check;
 	pthread_mutex_t	*left_fork;
@@ -43,10 +43,16 @@ long int			count_time(void);
 long int			ft_timestamp(long int time);
 void				oops(void);
 int					check_args(char **av);
-void				init_mutex(t_param *params, pthread_mutex_t *forks);
-void				create_philo(t_param *params, pthread_t *thread);
-void				init_params(t_param *params, char **av);
+int					init_mutexes(t_param *params, pthread_mutex_t *forks,
+						pthread_t *thread);
+int					create_philo(t_param *params, pthread_t *thread,
+						pthread_mutex_t *forks);
+int					init_params(t_param *params, pthread_t *thread,
+						pthread_mutex_t *forks, char **av);
 void				ft_usleep(long int time, t_param *params);
 void				free_all(t_param *params, pthread_mutex_t *forks,
+						pthread_t *thread, int last_mutex);				
+void				free_if_fail(t_param *params, pthread_mutex_t *forks,
 						pthread_t *thread);
+
 #endif

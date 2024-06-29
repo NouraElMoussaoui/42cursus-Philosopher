@@ -6,7 +6,7 @@
 /*   By: nel-mous <nel-mous@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 14:50:21 by nel-mous          #+#    #+#             */
-/*   Updated: 2023/04/24 18:25:25 by nel-mous         ###   ########.fr       */
+/*   Updated: 2023/04/29 13:12:27 by nel-mous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	ft_usleep(long int time, t_param *params)
 	{
 		usleep(100);
 		pthread_mutex_lock(params->m_check);
-		v = *params->v_died;
+		v = *params->v_check;
 		pthread_mutex_unlock(params->m_check);
 	}
 }
